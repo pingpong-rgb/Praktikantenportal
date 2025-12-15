@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_intern_intern_hr,access.intern.intern.hr,model_intern_intern,praktikanten_modul.group_intern_hr,1,1,1,1
+access_intern_intern_manager,access.intern.intern.manager,model_intern_intern,praktikanten_modul.group_intern_manager,1,1,1,1
+access_intern_intern_portal,access.intern.intern.portal,model_intern_intern,praktikanten_modul.group_intern_portal,1,0,0,0

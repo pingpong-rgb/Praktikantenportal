@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Listenansicht -->
+    <record id="view_intern_intern_list" model="ir.ui.view">
+        <field name="name">intern.intern.list</field>
+        <field name="model">intern.intern</field>
+        <field name="arch" type="xml">
+            <list string="Praktikant:innen">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Formularansicht -->
+    <record id="view_intern_intern_form" model="ir.ui.view">
+        <field name="name">intern.intern.form</field>
+        <field name="model">intern.intern</field>
+        <field name="arch" type="xml">
+            <form string="Praktikant/in">
+                <header>
+                    <button name="action_send_invitation"
+                            type="object"
+                            string="Einladung senden"
+                            class="btn-primary"
+                            icon="fa-envelope"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Aktion -->
+    <record id="action_intern_intern" model="ir.actions.act_window">
+        <field name="name">Praktikant:innen</field>
+        <field name="res_model">intern.intern</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menüeintrag -->
+    <menuitem id="menu_intern_root"
+          name="Praktikantenmodul"
+          parent="hr.menu_hr_root"
+          sequence="20"/>
+
+    <menuitem id="menu_intern_intern"
+              name="Praktikant:innen"
+              parent="menu_intern_root"
+              action="action_intern_intern"
+              sequence="10"/>
+</odoo>

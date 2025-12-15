@@ -1,0 +1,35 @@
+{
+    'name': 'Praktikantenmodul Verträge',
+    'version': '1.6.2',
+    'author': 'Timo Giese / TrendTec UG',
+    'website': 'https://...',
+    'summary': 'Vertragsverwaltung und Sign-Integration für das Praktikantenportal',
+    'description': 'Fügt Vertragsmanagement, Sign-Integration und Portal-Funktionalität zum Praktikantenmodul hinzu.',
+    'category': 'Human Resources',
+    'license': 'LGPL-3',
+    'depends': [
+        'praktikanten_modul',  # wichtig! Grundmodul als Abhängigkeit
+        'portal',
+        'mail',
+        'website',
+        'hr_timesheet',
+        'hr',
+        'sign',
+        'project',
+    ],
+    'data': [
+        'security/intern_contract_security.xml',
+        'security/intern_portal_project_access.xml',
+        'views/intern_contract_groups.xml',  # <- NEU (nach Security-Dateien)
+        'security/intern_contract_rules.xml',
+        'security/ir.model.access.csv',
+        'views/intern_contract_views.xml',
+        'views/intern_portal_templates.xml',
+        'views/portal_task_timesheet_templates.xml',
+        'views/portal_task_inherit.xml',
+        'data/sign_sync.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

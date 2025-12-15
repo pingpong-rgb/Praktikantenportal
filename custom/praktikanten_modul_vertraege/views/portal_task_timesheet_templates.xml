@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="portal_task_timesheet_form" name="Portal Task Timesheet">
+    <t t-call="portal.portal_layout">
+      <!-- Seite im Portal kontextualisieren -->
+      <t t-set="page_name" t-value="'task_timesheet'"/>
+      <div class="container mt-4">
+        <h3>Zeiterfassung für <t t-esc="task.name"/></h3>
+
+        <t t-if="request.params.get('error')">
+          <div class="alert alert-danger">Bitte Beschreibung und gültige Stundenzahl eingeben.</div>
+        </t>
+
+        <form t-att-action="'/my/task/%d/timesheet/submit' % task.id" method="post">
+          <!-- CSRF Token -->
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+          <div class="mb-3">
+            <label>Beschreibung</label>
+            <textarea name="description" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label>Stunden</label>
+            <input type="number" name="hours" class="form-control" step="0.25" min="0.25"/>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Speichern</button>
+          <a t-att-href="'/my/task/%d' % task.id" class="btn btn-secondary">Zurück</a>
+        </form>
+      </div>
+    </t>
+  </template>
+</odoo>

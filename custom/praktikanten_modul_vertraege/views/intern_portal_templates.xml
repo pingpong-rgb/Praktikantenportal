@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_intern_contracts" name="Meine Verträge (Praktikum)">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="None"/>
+            <div class="container">
+                <h2 class="mt-3 mb-4">Praktikumsverträge</h2>
+
+                <t t-if="not contracts">
+                    <p>Es liegen noch keine Verträge vor.</p>
+                </t>
+                <t t-else="">
+                    <ul class="list-group mb-4 shadow-sm rounded">
+                        <t t-foreach="contracts" t-as="c">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <!-- Vertragsname anklickbar -->
+                                    <a t-att-href="'/my/intern-contracts/%s' % c.id"
+                                       class="fw-semibold text-decoration-none">
+                                        <t t-esc="c.name"/>
+                                    </a>
+
+                                    <!-- Falls bereits ein Upload vorhanden ist -->
+                                    <t t-if="c.upload_filename">
+                                        <br/>
+                                        <small class="text-muted">
+                                            Bereits hochgeladen:
+                                            <a t-att-href="'/web/content/intern.contract/%s/upload/%s?download=true' % (c.id, c.upload_filename)"
+                                               target="_blank"
+                                               class="text-muted text-decoration-underline">
+                                                <i class="fa fa-file-pdf-o me-1"></i>
+                                                <t t-esc="c.upload_filename"/>
+                                            </a>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <!-- Status-Badge -->
+                                <span class="badge bg-secondary" t-esc="c.state"/>
+                            </li>
+
+                        </t>
+                    </ul>
+                </t>
+                <t t-if="selected">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" t-esc="selected.name"/>
+                            <p class="card-text">
+                                Status:
+                                <strong t-esc="selected.state"/>
+                            </p>
+
+                            <t t-if="selected.sign_request_id">
+                                <a class="btn btn-primary"
+                                   t-att-href="'/my/intern-contracts/sign/%s' % selected.id">
+                                    Vertrag unterschreiben
+                                </a>
+                            </t>
+
+                            <form t-att-action="'/my/intern-contracts/upload/%s' % selected.id"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="mb-3">
+                                    <label class="form-label">Eigenen Vertrag hochladen (PDF)</label>
+                                    <input type="file" class="form-control"
+                                           name="contract_file"
+                                           accept="application/pdf"/>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Hochladen</button>
+                            </form>
+                        </div>
+                    </div>
+                </t>
+
+                <t t-if="not selected">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/my/intern-contracts/upload_new"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="mb-3">
+                                    <label class="form-label">Eigenen Vertrag hochladen (PDF)</label>
+                                    <input type="file" class="form-control"
+                                           name="contract_file"
+                                           accept="application/pdf"/>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Hochladen</button>
+                            </form>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================= -->
+    <!-- Portal-Home: Praktikumsverträge -->
+    <!-- ============================= -->
+    <template id="portal_my_home_intern_contracts"
+              inherit_id="portal.portal_my_home"
+              name="Portal Home: Intern Contracts">
+        <xpath expr="//div[@id='portal_service_category']" position="inside">
+            <div class="o_portal_index_card col-md-6 order-2">
+                <a t-att-href="'/my/intern-contracts'"
+                   title="Praktikumsverträge"
+                   class="d-flex gap-2 gap-md-3 py-3 pe-2 px-md-3 h-100 rounded text-decoration-none bg-100">
+                    <div class="o_portal_icon d-block align-self-start">
+                        <img t-att-src="'/praktikanten_modul_vertraege/static/vertrag.png'"
+                             alt="Vertragsdokument"
+                             loading="lazy"
+                             style="width: 64px; height: 64px; object-fit: contain;"/>
+                    </div>
+                    <div>
+                        <div class="mt-0 mb-1 fs-5 fw-normal lh-1">
+                            <span>Praktikumsverträge</span>
+                        </div>
+                        <div class="opacity-75">
+                            Eigene Verträge ansehen oder PDF hochladen.
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ========================== -->
+    <!-- Portal-Home: Wochenbericht -->
+    <!-- ========================== -->
+    <template id="portal_my_home_wochenbericht"
+              inherit_id="portal.portal_my_home"
+              name="Portal Home: Wochenbericht">
+        <xpath expr="//div[@id='portal_common_category']" position="inside">
+            <div class="o_portal_index_card col-md-6 order-2">
+                <a t-att-href="'/my/wochenberichte'"
+                   title="Wochenbericht"
+                   class="d-flex gap-2 gap-md-3 py-3 pe-2 px-md-3 h-100 rounded text-decoration-none bg-100">
+                    <div class="o_portal_icon d-block align-self-start">
+                        <img t-att-src="'/praktikanten_modul_vertraege/static/description/weekly_report_icon.png'"
+                             alt="Wochenbericht"
+                             loading="lazy"
+                             style="width:40px;height:40px;"/>
+                    </div>
+                    <div>
+                        <div class="mt-0 mb-1 fs-5 fw-normal lh-1">
+                            <span>Wochenberichte</span>
+                        </div>
+                        <div class="opacity-75">
+                            Übersicht aller Wochenberichte mit PDF-Download.
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- ============================ -->
+    <!-- Wochenberichte: Übersicht -->
+    <!-- ============================ -->
+    <template id="portal_weekly_reports_list" name="Wochenberichte Übersicht">
+        <t t-call="portal.portal_layout">
+            <div class="container mt16">
+                <h2>Meine Wochenberichte</h2>
+                <t t-if="not weeks">
+                    <p>Keine Timesheets gefunden.</p>
+                </t>
+                <t t-else="">
+                    <table class="table table-sm table-bordered mt16">
+                        <thead>
+                            <tr>
+                                <th>Jahr</th>
+                                <th>Kalenderwoche</th>
+                                <th>Zeitraum</th>
+                                <th>Einträge</th>
+                                <th>Aktion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="weeks" t-as="w">
+                                <tr>
+                                    <td>
+                                        <t t-esc="w['year']"/>
+                                    </td>
+                                    <td>KW
+                                        <t t-esc="w['week']"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="w['start_date']"/>
+                                        –
+                                        <t t-esc="w['end_date']"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="w['timesheet_count']"/>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                           t-att-href="'/my/wochenberichte/%s/%s' % (w['year'], w['week'])">
+                                            PDF herunterladen
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

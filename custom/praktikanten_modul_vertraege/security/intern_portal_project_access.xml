@@ -1,0 +1,66 @@
+<odoo>
+
+    <!-- Portal: Darf Projekte sehen, bei denen er Kollaborator oder Follower ist -->
+    <record id="rule_portal_project_read" model="ir.rule">
+        <field name="name">Portal: read projects as collaborator or follower</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <!-- collaborator_ids ist genau für Portal-Zugriff gedacht; Fallback: Follower -->
+        <field name="domain_force">
+            ['|', ('collaborator_ids', 'in', [user.partner_id.id]),
+                  ('message_partner_ids', 'in', [user.partner_id.id])]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Portal: Darf Tasks sehen, wenn er am Projekt Kollaborator/Follower ist oder die Task selbst auf seinen Partner zeigt -->
+    <record id="rule_portal_task_read" model="ir.rule">
+        <field name="name">Portal: read tasks of accessible projects or assigned partner</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">
+            ['|',
+               ('partner_id', '=', user.partner_id.id),
+               '|',
+                  ('project_id.collaborator_ids', 'in', [user.partner_id.id]),
+                  ('project_id.message_partner_ids', 'in', [user.partner_id.id])
+            ]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Optional: Portal darf seine eigenen Anhänge (z. B. an Tasks) sehen -->
+    <record id="rule_portal_attachment_read" model="ir.rule">
+        <field name="name">Portal: read attachments of accessible records</field>
+        <field name="model_id" ref="base.model_ir_attachment"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">
+            ['|',
+               ('res_model', '=', 'project.task'),
+               ('res_model', '=', 'project.project')
+            ]
+        </field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Portal: darf nur eigene Timesheets sehen -->
+      <record id="rule_portal_timesheet_read_own" model="ir.rule">
+        <field name="name">Portal: read own timesheets by partner</field>
+        <field name="model_id" ref="analytic.model_account_analytic_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        </record>
+</odoo>

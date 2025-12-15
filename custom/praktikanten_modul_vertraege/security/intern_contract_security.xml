@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="group_intern_contract_hr" model="res.groups">
+        <field name="name">HR / Verträge</field>
+    </record>
+
+    <record id="group_intern_contract_manager" model="res.groups">
+        <field name="name">Ausbildungsbetreuer:in / Verträge</field>
+        <field name="implied_ids" eval="[(4, ref('praktikanten_modul.group_intern_hr'))]"/>
+    </record>
+</odoo>

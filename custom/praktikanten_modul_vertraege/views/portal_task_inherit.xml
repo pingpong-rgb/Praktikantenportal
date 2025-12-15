@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="portal_add_timesheet_button"
+            inherit_id="hr_timesheet.portal_my_task"
+            name="Portal Task Add Timesheet Button (Timesheet Section)">
+
+    <!-- Button direkt über der Timesheet-Tabelle -->
+    <xpath expr="//h5[@id='task_timesheets']" position="before">
+      <t t-if="allow_timesheets">
+        <div class="text-end mb-3">
+          <a t-att-href="'/my/task/%d/timesheet' % task.id"
+             class="btn btn-danger">
+            <i class="fa fa-clock-o me-1"/> Zeit erfassen
+          </a>
+        </div>
+      </t>
+    </xpath>
+
+  </template>
+</odoo>

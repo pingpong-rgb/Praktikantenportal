@@ -1,0 +1,10 @@
+<!-- custom/praktikanten_modul_vertraege/data/sign_sync.xml -->
+<odoo>
+    <record id="action_intern_contract_sync_from_sign" model="ir.actions.server">
+        <field name="name">Sync Sign → Praktikumsverträge</field>
+        <field name="model_id" ref="model_intern_contract"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_intern_contract"/>
+        <field name="code">action = env['intern.contract'].action_sync_from_sign()</field>
+    </record>
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="praktikanten_modul.menu_intern_root" name="Praktikantenmodul" parent="hr.menu_hr_root" sequence="20"/>
+    <menuitem id="menu_intern_contract_root" name="Verträge" parent="praktikanten_modul.menu_intern_root" sequence="30"/>
+
+    <record id="view_intern_contract_tree" model="ir.ui.view">
+        <field name="name">intern.contract.list</field>
+        <field name="model">intern.contract</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="intern_id"/>
+                <field name="state"/>
+                <field name="sign_status"/>
+                <field name="signed_date"/>
+                <field name="responsible_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_intern_contract_form" model="ir.ui.view">
+        <field name="name">intern.contract.form</field>
+        <field name="model">intern.contract</field>
+        <field name="arch" type="xml">
+            <form string="Vertrag">
+                <header>
+                    <!-- Buttons: neue Syntax ohne 'states' oder 'attrs' -->
+                    <button name="action_reset_draft" type="object" string="Entwurf"
+                            invisible="state not in ['awaiting', 'signed', 'uploaded', 'cancel']"
+                            class="btn-secondary"/>
+
+                    <button name="action_mark_awaiting" type="object" string="Warten auf Unterschrift"
+                            invisible="state not in ['draft', 'uploaded']"
+                            class="btn-secondary"/>
+
+                    <button name="action_mark_signed" type="object" string="Als unterschrieben markieren"
+                            invisible="state not in ['awaiting', 'uploaded']"
+                            class="btn-primary"/>
+
+                    <button name="action_cancel" type="object" string="Abbrechen"
+                            invisible="state not in ['draft', 'awaiting', 'uploaded']"
+                            class="btn-secondary"/>
+
+                    <button name="action_open_sign" type="object" string="Sign-Anfrage öffnen"
+                            invisible="not sign_request_id"
+                            class="btn-secondary"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,awaiting,signed,uploaded,cancel"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="intern_id" options="{'no_open': False}"/>
+                        <field name="responsible_id"/>
+                        <field name="note"/>
+                    </group>
+                    <group string="Dokument">
+                        <field name="upload" filename="upload_filename"/>
+                        <field name="upload_filename" readonly="True"/>
+                        <field name="sign_request_id" readonly="True"/>
+                        <field name="sign_status" readonly="True"/>
+                        <field name="signed_date" readonly="True"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_intern_contract" model="ir.actions.act_window">
+        <field name="name">Verträge</field>
+        <field name="res_model">intern.contract</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_intern_contract" name="Verträge" parent="menu_intern_contract_root" action="action_intern_contract" sequence="10"/>
+
+    <record id="intern_intern_form_inherit_contracts" model="ir.ui.view">
+        <field name="name">intern.intern.form.contracts.smartbutton</field>
+        <field name="model">intern.intern</field>
+        <field name="inherit_id" ref="praktikanten_modul.view_intern_intern_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button type="action"
+                        name="%(action_intern_contract)d"
+                        context="{'search_default_intern_id': id, 'default_intern_id':id}"
+                        class="oe_stat_button"
+                        icon="fa-file">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">Verträge</span>
+                    </div>
+                </button>
+            </header>
+        </field>
+    </record>
+</odoo>

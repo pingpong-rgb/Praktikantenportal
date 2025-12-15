@@ -1,0 +1,13 @@
+<odoo>
+    <!-- Portal: darf alle aktiven Onboarding-Schritte lesen -->
+    <record id="intern_onboarding_portal_rule" model="ir.rule">
+        <field name="name">Intern Onboarding: Portal sieht aktive Schritte</field>
+        <field name="model_id" ref="praktikanten_modul.model_intern_onboarding"/>
+        <field name="groups" eval="[(4, ref('praktikanten_modul.group_intern_portal'))]"/>
+        <field name="domain_force">[('active', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>
